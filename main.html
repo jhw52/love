@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>给佳瑶的专属安慰</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body, html { width: 100%; height: 100%; overflow: hidden; font-family: "PingFang SC", "Microsoft YaHei", sans-serif; }
+
+        /* 设置背景图片 */
+        #container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* TODO: 在这里换上你的线条小狗图片文件名，确保bg.jpg放在同文件夹 */
+            background-image: url('bg.jpg'); 
+            background-size: cover;          /* 图片覆盖全屏 */
+            background-position: center;     /* 图片居中 */
+            background-repeat: no-repeat;
+            background-color: #ffe5ec;       /* 如果图片没加载出来，显示粉色兜底 */
+            padding: 30px;
+            text-align: center;
+            transition: all 0.8s ease;
+        }
+
+        /* 文字样式，增加半透明背景让文字更清晰 */
+        #text {
+            font-size: 1.4rem;
+            color: #d63384;
+            font-weight: bold;
+            line-height: 1.8;
+            background: rgba(255, 255, 255, 0.6); /* 半透明底色，保证背景图上的字清晰 */
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            max-width: 90%;
+            cursor: pointer;
+        }
+
+        /* 动画库 */
+        .fade-in { animation: fadeIn 1.5s ease; }
+        .slide-up { animation: slideUp 1.5s ease; }
+        .bounce-in { animation: bounceIn 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+        .rotate-in { animation: rotateIn 1.5s ease; }
+        .zoom-in { animation: zoomIn 1.5s ease; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes bounceIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes rotateIn { from { transform: rotate(-10deg) scale(0.9); opacity: 0; } to { transform: rotate(0) scale(1); opacity: 1; } }
+        @keyframes zoomIn { from { transform: scale(1.2); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <div id="container" onclick="nextPage()">
+        <p id="text" class="fade-in">点击屏幕开始...</p>
+    </div>
+
+    <audio id="bgm" loop preload="auto">
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // 安慰文案
+        const textList =[
+            "佳瑶宝贝，我知道最近家里的事和学业的压力让你喘不过气来",
+            "你想哭就尽情哭吧，我会一直守在你身边",
+            "不管是家里的压力，还是学业的难题，都不是你一个人在面对",
+            "我会和你一起承担",
+            "你不用那么要强，在我这里你可以做最真实的自己",
+            "累了就靠在我肩上休息一下",
+            "我会一直握紧你的手，陪你度过这段艰难的时光",
+            "未来的路我们一起走，我永远是你最坚实的依靠"
+        ];
+
+        // 结束语
+        const endText = "爱你哦";
+
+        const animations =['fade-in', 'slide-up', 'bounce-in', 'rotate-in', 'zoom-in'];
+        
+        let currentIndex = 0;
+        let isStarted = false;
+        let isFinished = false; // 新增状态标记
+        const textEl = document.getElementById('text');
+        const bgm = document.getElementById('bgm');
+
+        function nextPage() {
+            // 音乐控制
+            if (!isStarted) {
+                bgm.play().catch(e => console.log("等待用户交互后播放"));
+                isStarted = true;
+            }
+
+            // 如果已经结束，则不再执行任何逻辑
+            if (isFinished) return;
+
+            // 显示安慰文案
+            if (currentIndex < textList.length) {
+                textEl.innerText = textList[currentIndex];
+                applyAnimation();
+                currentIndex++;
+            } 
+            // 显示结束页
+            else {
+                textEl.innerText = endText;
+                textEl.style.backgroundColor = "rgba(255, 255, 255, 0.8)"; // 结束页底色更亮一点
+                applyAnimation();
+                isFinished = true; // 锁定状态
+            }
+        }
+
+        // 抽取动画函数
+        function applyAnimation() {
+            const randomAnim = animations[Math.floor(Math.random() * animations.length)];
+            textEl.className = ''; 
+            void textEl.offsetWidth; // 触发重排
+            textEl.className = randomAnim;
+        }
+    </script>
+</body>
+</html>
